@@ -4,6 +4,7 @@ import { Info } from 'lucide-react';
 import { useLanguage } from '../../i18n/index.jsx';
 
 const descriptions = {
+  orgGoal: ['লক্ষ্যের সঙ্গে সামঞ্জস্য', 'ORG = প্রতিষ্ঠানের লক্ষ্য, DEPT = বিভাগের লক্ষ্য, SEC = শাখার লক্ষ্য। KPI কোন স্তরের লক্ষ্য পূরণে অবদান রাখে তা বেছে নিন।', 'Goal alignment', 'ORG = organization goals, DEPT = department goals, SEC = section goals. Choose the goal level this KPI supports.'],
   title: ['KPI কী?', 'কাজের সফলতা মাপার নির্দিষ্ট সূচক। কী অর্জন করতে হবে, কতটুকু এবং কখন—তা স্পষ্ট করে।', 'What is a KPI?', 'A measurable indicator of success. State what must be achieved, how much and by when.'],
   kra: ['KRA · দায়িত্বের ক্ষেত্র', 'যে বড় দায়িত্বের ক্ষেত্রে ফলাফল দিতে হবে। যেমন সেবার মান বা উৎপাদন দক্ষতা।', 'KRA · Key Result Area', 'The broad area of responsibility where results are expected, such as service quality.'],
   mo: ['MO · মূল লক্ষ্য', 'KRA-এর মধ্যে প্রধান যে ফলাফল অর্জন করতে চান। KPI দিয়ে এই লক্ষ্যের অগ্রগতি মাপা হয়।', 'MO · Major objective', 'The main outcome within a KRA. KPIs measure progress toward this objective.'],

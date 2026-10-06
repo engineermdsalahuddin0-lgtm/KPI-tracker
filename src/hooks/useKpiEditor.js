@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { months } from '../lib/model.mjs';
+import { months, goalAlignments } from '../lib/model.mjs';
 const emptyEntry = () => ({
   status: 'Pending',
   achievement: '',
@@ -20,6 +20,7 @@ export default function useKpiEditor({kpis,setKpis,update,year,month,dept,admin}
       dept: dept === 'All departments' ? 'ERP & IT' : dept,
       kra: '',
       mo: '',
+      orgGoal: '',
       title: '',
       specific: '',
       measure: '',
@@ -51,6 +52,8 @@ export default function useKpiEditor({kpis,setKpis,update,year,month,dept,admin}
     setError('');
     if (step === 0 && (!wizard.kra.trim() || !wizard.mo.trim()))
       return setError('Enter one KRA and one major objective.');
+    if (step === 0 && !goalAlignments.includes(wizard.orgGoal))
+      return setError('Select alignment: ORG, DEPT or SEC.');
     if (step === 1) {
       if (mode === 'SMART builder') {
         if (
@@ -146,6 +149,8 @@ export default function useKpiEditor({kpis,setKpis,update,year,month,dept,admin}
       update(k.id, 'entries', { ...k.entries, [edit.key]: e });
     } else {
       let val = edit.value;
+      if (edit.field === 'orgGoal' && !goalAlignments.includes(val))
+        return setError('Select alignment: ORG, DEPT or SEC.');
       if (['weight', 'baseline', 'target', 'threshold'].includes(edit.field)) {
         val = Number(val);
         if (!Number.isFinite(val) || val < 0)
@@ -180,7 +185,7 @@ export default function useKpiEditor({kpis,setKpis,update,year,month,dept,admin}
 
   function openField(k,field) {
     setError('');
-    setEdit({kind:'field',id:k.id,field,value:k[field],label:`${k.id} · ${field}`});
+    setEdit({kind:'field',id:k.id,field,value:k[field] ?? '',label:`${k.id} · ${field}`});
   }
   return {wizard,setWizard,step,setStep,mode,setMode,error,setError,edit,setEdit,newKpi,w,next,saveEdit,openEntry,openField};
 }

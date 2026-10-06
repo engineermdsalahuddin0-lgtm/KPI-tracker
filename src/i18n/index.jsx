@@ -2,6 +2,9 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const LanguageContext = createContext(null);
 export const bangla = {
+  'Aligned with ORG/DEPT/Section goals': 'প্রতিষ্ঠান / বিভাগ / শাখার লক্ষ্যের সঙ্গে সামঞ্জস্য',
+  'Select alignment': 'লক্ষ্যের স্তর বেছে নিন',
+  'Select alignment: ORG, DEPT or SEC.': 'লক্ষ্যের স্তর বেছে নিন: ORG, DEPT অথবা SEC।',
   'HR & Admin':'HR ও প্রশাসন', 'Industrial Engineering':'ইন্ডাস্ট্রিয়াল ইঞ্জিনিয়ারিং', 'CAD & Sample':'CAD ও নমুনা', 'Commercial':'বাণিজ্যিক',
   'Engineering & Services':'ইঞ্জিনিয়ারিং ও সেবা', 'ERP & IT':'ERP ও IT', 'Finance & Accounts':'অর্থ ও হিসাব', 'General':'সাধারণ',
   'HR, Admin & Compliance':'HR, প্রশাসন ও কমপ্লায়েন্স', 'MIS & Internal Audit':'MIS ও অভ্যন্তরীণ নিরীক্ষা', 'Production':'উৎপাদন',

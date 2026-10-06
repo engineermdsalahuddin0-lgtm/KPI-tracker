@@ -1,6 +1,7 @@
 import React from 'react';
 import { Localized, useLanguage } from '../../i18n/index.jsx';
 import { X } from 'lucide-react';
+import { goalAlignments } from '../../lib/model.mjs';
 export default function EntryModal({ edit,setEdit,error,saveEdit,admin }) {
 
   return <Localized><div className="overlay">
@@ -15,7 +16,7 @@ export default function EntryModal({ edit,setEdit,error,saveEdit,admin }) {
               {edit.kind === 'field' ? (
                 <label>
                   Value
-                  {['perspective', 'threshold', 'direction', 'unit'].includes(
+                  {['orgGoal', 'perspective', 'threshold', 'direction', 'unit'].includes(
                     edit.field,
                   ) ? (
                     <select
@@ -25,6 +26,7 @@ export default function EntryModal({ edit,setEdit,error,saveEdit,admin }) {
                       }
                     >
                       {{
+                        orgGoal: ['', ...goalAlignments],
                         perspective: [
                           'Process',
                           'Account',
@@ -41,7 +43,7 @@ export default function EntryModal({ edit,setEdit,error,saveEdit,admin }) {
                           'Unit',
                         ],
                       }[edit.field].map((x) => (
-                        <option key={x}>{x}</option>
+                        <option key={x} value={x}>{x || 'Select alignment'}</option>
                       ))}
                     </select>
                   ) : (

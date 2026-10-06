@@ -1,7 +1,7 @@
 import React from 'react';
 import { Localized, useLanguage } from '../../i18n/index.jsx';
 import { X, Plus, ChevronRight } from 'lucide-react';
-import { departments, months } from '../../lib/model.mjs';
+import { departments, months, goalAlignments } from '../../lib/model.mjs';
 export default function KpiWizard({ wizard,step,mode,error,setWizard,setStep,setMode,w,next,kpis,year }) {
   const field = (label, key, type = 'text') => (
     <label>
@@ -59,6 +59,12 @@ export default function KpiWizard({ wizard,step,mode,error,setWizard,setStep,set
                   {select('Department', 'dept', departments)}
                   {field('Key result area (one KRA)', 'kra')}
                   {field('Major objective (one MO)', 'mo')}
+                  <label>Aligned with ORG/DEPT/Section goals
+                    <select aria-label="Aligned with ORG/DEPT/Section goals" value={wizard.orgGoal} onChange={(e) => w('orgGoal', e.target.value)}>
+                      <option value="">Select alignment</option>
+                      {goalAlignments.map((alignment) => <option key={alignment} value={alignment}>{alignment}</option>)}
+                    </select>
+                  </label>
                 </>
               )}
               {step === 1 && (

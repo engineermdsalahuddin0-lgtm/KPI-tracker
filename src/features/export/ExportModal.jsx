@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Download, Check } from 'lucide-react';
 import { Localized, useLanguage } from '../../i18n/index.jsx';
+import { goalAlignments } from '../../lib/model.mjs';
 export default function ExportModal({
   kpis,
   departments,
@@ -10,6 +11,7 @@ export default function ExportModal({
 }) {
   const { language, t } = useLanguage();
   const [reportLanguage, setReportLanguage] = useState(language);
+  const [alignmentOverrides, setAlignmentOverrides] = useState({});
   const [scope, setScope] = useState('Department'),
     [dept, setDept] = useState(
       initialDept === 'All departments' ? departments[0] : initialDept,
@@ -28,10 +30,11 @@ export default function ExportModal({
       subsection: '',
     });
   const list = kpis.filter((k) => k.dept === dept),
-    chosen =
+    selected =
       scope === 'Single KPI'
         ? list.filter((k) => k.id === (id || list[0]?.id))
-        : list;
+        : list,
+    chosen = selected.map((k) => ({ ...k, orgGoal: alignmentOverrides[k.id] ?? k.orgGoal ?? '' }));
   async function download() {
     setBusy(true);
     setError('');
@@ -186,6 +189,7 @@ export default function ExportModal({
                         'KPI ID',
                         'KRA',
                         'Major Objective',
+                        'Aligned with ORG/DEPT/Section goals',
                         'KPI',
                         'Weight',
                         'Baseline',
@@ -204,6 +208,11 @@ export default function ExportModal({
                         <td>{k.id}</td>
                         <td data-user-content>{k.kra}</td>
                         <td data-user-content>{k.mo}</td>
+                        <td><select aria-label={`${t('Aligned with ORG/DEPT/Section goals')}: ${k.id}`} value={k.orgGoal}
+                          onChange={(e) => setAlignmentOverrides((values) => ({ ...values, [k.id]: e.target.value }))}>
+                          <option value="">Select alignment</option>
+                          {goalAlignments.map((alignment) => <option key={alignment} value={alignment}>{alignment}</option>)}
+                        </select></td>
                         <td data-user-content>{k.title}</td>
                         <td>{k.weight}%</td>
                         <td>{k.baseline}</td>
@@ -217,6 +226,9 @@ export default function ExportModal({
                 </table>
               </div>
             </div>
+            <p className="board-note">
+              {language === 'bn' ? 'প্রিভিউতে প্রতিটি KPI-এর ORG / DEPT / SEC বেছে নিতে পারেন। এই পরিবর্তন শুধু ডাউনলোডে প্রযোজ্য; মূল KPI-তে save হবে না।' : 'Choose ORG / DEPT / SEC for each KPI in the preview. These selections apply to this download only; stored KPIs stay unchanged.'}
+            </p>
             <p className="board-note">
               {language === 'bn' ? 'এখানে নির্বাচিত KPI-এর সংক্ষিপ্ত প্রিভিউ। ডাউনলোডে আগের template-এর merged KPI/action row এবং ১২ মাসের column থাকবে।' : 'This is a short preview of the selected KPIs. Download uses the original template’s merged KPI/action rows and 12 monthly columns.'}
             </p>

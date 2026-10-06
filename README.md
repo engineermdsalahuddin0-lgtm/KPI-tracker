@@ -113,7 +113,7 @@ Department row ক্লিক করলে সেই বিভাগের KPI 
 
 | ধাপ | তথ্য |
 | --- | --- |
-| 1 | Department, একটি KRA এবং একটি major objective |
+| 1 | Department, একটি KRA, major objective এবং goal alignment (`ORG`, `DEPT`, `SEC`) |
 | 2 | Direct KPI অথবা SMART builder; perspective |
 | 3 | Action steps, দায়িত্বপ্রাপ্ত ব্যক্তি ও শেষ তারিখ |
 | 4 | প্রয়োজনীয় সহায়তা বা resources |
@@ -122,6 +122,8 @@ Department row ক্লিক করলে সেই বিভাগের KPI 
 | 7 | ঐচ্ছিক প্রথম মাসের achievement |
 
 অন্তত একটি action ও তার owner প্রয়োজন। নতুন KPI-এর weight শূন্যের বেশি হতে হবে। বিভাগে আগে থেকেই ১০০% বরাদ্দ থাকলে নতুন KPI যোগ করার আগে বর্তমান weight কমাতে হবে। অ্যাপ সর্বোচ্চ **৬০টি KPI** তৈরির সীমা প্রয়োগ করে।
+
+Major Objective-এর পর `Aligned with ORG/DEPT/Section goals` নির্বাচন করা প্রয়োজন: `ORG` প্রতিষ্ঠানের, `DEPT` বিভাগের এবং `SEC` শাখার লক্ষ্য। Admin KPI details থেকেও এটি পরিবর্তন করতে পারেন। আগের stored KPI-তে field না থাকলে details-এ `—` দেখায়; কোনো alignment অনুমান করে বসানো হয় না।
 
 ### 3. মাসিক অর্জন ও details
 
@@ -199,6 +201,7 @@ Coverage (%)         = Scored weight / Assigned weight × 100
 | --- | --- |
 | `id`, `dept` | KPI identifier ও department |
 | `kra`, `mo`, `title` | দায়িত্বের ক্ষেত্র, মূল লক্ষ্য ও KPI |
+| `orgGoal` | Goal alignment: `ORG`, `DEPT` অথবা `SEC` |
 | `perspective`, `requirements` | দৃষ্টিকোণ ও প্রয়োজনীয় সহায়তা |
 | `weight`, `threshold` | গুরুত্ব ও minimum score |
 | `direction`, `unit` | HIGH/LOW এবং measurement unit |
@@ -311,7 +314,7 @@ package-lock.json
 | `summary(kpis, year, month)` | `{ assigned, coverage, performance, score }` aggregate |
 | `statusClass(status)` | Status-এর semantic CSS class নির্বাচন |
 
-`departments` ও `months` array-ও `src/lib/model.mjs` থেকে export হয়।
+`departments`, `months` ও `goalAlignments` array-ও `src/lib/model.mjs` থেকে export হয়।
 
 ### Assistant functions
 
@@ -366,6 +369,8 @@ User content-এ `data-user-content` marker ব্যবহার করা হ�
 
 Download-এ `Goal Setting_Dept` sheet-এর original columns/widths, quarter/month headers এবং merged KPI/action layout রাখা হয়। লম্বা লেখা wrap হয়; action row height content অনুযায়ী বাড়ে। Metadata আলাদা merged master cell-এ বসে, যাতে label overwrite না হয়। Selected half-year-এর বাইরের মাস main sheet-এ `—` দেখায়।
 
+Alignment template-এর **D column**-এ Major Objective-এর পরে যায়। Export preview-তে প্রতিটি KPI-এর `ORG` / `DEPT` / `SEC` নির্বাচন বা পরিবর্তন করা যায়; এই override শুধু সেই download-এ ব্যবহৃত হয়, stored KPI update করে না।
+
 `Monthly Results`-এ নির্বাচিত KPI/month-এর target, effective target, achievement, performance, score, policy ও remarks থাকে। Targets report-এ detail sheet থেকে achievement/performance/score column বাদ যায়। Numbers/percentages typed values হিসেবে লেখা হয়; user text formula হিসেবে লেখা হয় না।
 
 Template-এর original legacy worksheets রাখা হয়। Main sheet-এর scoring legend app-এর active calculation অনুযায়ী update হয়। Web preview একটি সংক্ষিপ্ত data summary, Excel-এর pixel-exact preview নয়।
@@ -377,14 +382,14 @@ npm test
 npm run build
 ```
 
-বর্তমানে **১৩টি automated test** আছে:
+বর্তমানে **১৪টি automated test** আছে:
 
 | Test file | Coverage |
 | --- | --- |
 | `tests/model.test.mjs` | HIGH/LOW, zero handling, exclusions, coverage, override, approval ও sample weight |
 | `tests/assistant.test.mjs` | Partial/Roman Bangla suggestions, bilingual retrieval ও exact selected-question answers |
 | `tests/export.test.mjs` | Internal typed data sheets, long Bangla text, zero/override values, dates, ৬৫ actions ও invalid year |
-| `tests/template-export.test.mjs` | Original template geometry, metadata cell isolation, merged blocks, monthly values ও footer relocation |
+| `tests/template-export.test.mjs` | Original template geometry, metadata cell isolation, ORG/DEPT/SEC mapping, merged blocks, monthly values ও footer relocation |
 
 Tests এবং production build refactor-এর পরে pass করেছে। Browser checks-এ login, navigation, wizard validation, monthly modal, action modal, assistant ও language switch যাচাই করা হয়েছে। Browser checks manual; এগুলো `npm test`-এর অংশ নয়।
 

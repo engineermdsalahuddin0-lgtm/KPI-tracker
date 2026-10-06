@@ -1,3 +1,4 @@
+export const goalAlignments = ['ORG', 'DEPT', 'SEC'];
 export const departments = [
   'HR & Admin',
   'Industrial Engineering',

@@ -1,4 +1,5 @@
 # Security — local prototype
+2026-10-07 goal alignment: ORG/DEPT/SEC is locally stored KPI metadata. Setup editing follows existing admin UI permissions; export-time overrides affect only the generated report. No new external access or transmission is introduced.
 2026-10-07 source organization: Code moved into src/components, src/features, src/hooks and src/lib. Demo authentication, UI permissions, storage keys, public assets and local-only data flows are unchanged.
 2026-10-07 status styling: Semantic status colors add no new data access or permissions; editing behavior is unchanged.
 2026-10-07 interaction refinement: Action-plan dialogs preserve the existing UI editing permissions and localStorage persistence. No new external service, data transmission or authorization mechanism was introduced.

@@ -300,6 +300,7 @@ export default function Board({
                 {[
                   ['KRA', 'kra'],
                   ['Major objective', 'mo'],
+                  ['Aligned with ORG/DEPT/Section goals', 'orgGoal'],
                   ['SMART KPI', 'title'],
                   ['Perspective', 'perspective'],
                   ['Weight', 'weight'],
@@ -314,7 +315,7 @@ export default function Board({
                     <dt><Help field={f}>{t(label)}</Help></dt>
                     <dd>
                       <button data-user-content disabled={!admin} onClick={() => onEdit(k, f)}>
-                        {['perspective','direction','unit'].includes(f) ? t(k[f]) : k[f]}
+                        {['perspective','direction','unit'].includes(f) ? t(k[f]) : k[f] === '' || k[f] == null ? '—' : k[f]}
                         {f === 'weight' ? '%' : f === 'threshold' ? ' / 5' : ''}
                       </button>
                     </dd>

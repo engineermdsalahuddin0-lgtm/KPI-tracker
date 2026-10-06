@@ -5,6 +5,17 @@ import ExcelJS from 'exceljs';
 import {buildReport} from '../src/features/export/excel-export.mjs';
 import {seed} from '../src/lib/model.mjs';
 const template=fs.readFileSync(new URL('../public/report-template.xlsx',import.meta.url));
+test('ORG, DEPT and SEC alignments export to their own merged template column',async()=>{
+  const ks=seed().slice(0,3).map((k,index)=>({...k,orgGoal:['ORG','DEPT','SEC'][index]}));
+  const w=new ExcelJS.Workbook();await w.xlsx.load(await buildReport(template,ks,{year:2026,language:'en'}));
+  const s=w.getWorksheet('Goal Setting_Dept');
+  assert.equal(s.getCell('D6').value,'Aligned with ORG/DEPT/Section goals');
+  for(const [index,k] of ks.entries()) {
+    const row=9+index*3;assert.equal(s.getCell(row,4).value,k.orgGoal);
+    assert.equal(s.getCell(row+2,4).value,k.orgGoal);
+    assert.equal(s.getCell(row,3).value,k.mo);assert.equal(s.getCell(row,6).value,k.title);
+  }
+});
 test('original template layout retains distinct metadata masters and KPI/month columns',async()=>{
   const ks=seed().filter(k=>k.dept==='ERP & IT');
   ks[0].title='লম্বা বাংলা KPI লেখা '.repeat(16);
