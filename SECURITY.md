@@ -12,3 +12,5 @@ Before production: replace demo authentication with server-backed authentication
 Excel export happens locally in the browser. At the user's request, it again uses the supplied template and preserves its original legacy worksheets. The main report and Monthly Results reflect selected KPI data; legacy sheets retain the template's existing sample content. The supplied template is publicly bundled.
 
 2026-10-07 UI update: Language preference is stored in bitopi-language. Question suggestions and bilingual answers are computed locally from the existing public dataset. No remote AI service, telemetry or new credential flow was added. Tooltip and user content render as React text; no HTML from the dataset is injected. Export writes user strings as text cells, not executable formulas.
+
+Excel template bytes are also bundled in the lazy export module to avoid runtime template fetch failures; report generation and KPI data remain local.

@@ -345,7 +345,8 @@ User content-এ `data-user-content` marker ব্যবহার করা হ�
 
 | Function | দায়িত্ব |
 | --- | --- |
-| `download()` in `ExportModal` | Public template fetch, builder lazy-load এবং browser download |
+| `download()` in `ExportModal` | Builder lazy-load, bundled template থেকে report তৈরি এবং browser download |
+| `buildOriginalReport(kpis, options)` | Bundled original template ব্যবহার করে report তৈরি; আলাদা template fetch লাগে না |
 | `buildReport(template, kpis, options)` | Original template load, selected data mapping, merged action blocks/footer rebuild ও `Monthly Results` যোগ; workbook buffer return |
 | `buildDataWorkbook(_template, kpis, options)` | Internal typed workbook builder; downloaded report-এর detailed monthly sheet-এর source |
 | `measurement(cell, value, unit)` | Numeric/percentage/currency value ও Excel format set |
@@ -366,6 +367,8 @@ User content-এ `data-user-content` marker ব্যবহার করা হ�
 - HOD, unit, location, section ও subsection metadata।
 
 মূল template: [public/report-template.xlsx](public/report-template.xlsx)।
+
+Download-এর জন্য একই template `src/features/export/report-template.mjs`-এ base64 হিসেবে bundled আছে। Template বদলালে এই module-ও regenerate করতে হবে; regression test দুইটির byte equality যাচাই করে।
 
 Download-এ `Goal Setting_Dept` sheet-এর original columns/widths, quarter/month headers এবং merged KPI/action layout রাখা হয়। লম্বা লেখা wrap হয়; action row height content অনুযায়ী বাড়ে। Metadata আলাদা merged master cell-এ বসে, যাতে label overwrite না হয়। Selected half-year-এর বাইরের মাস main sheet-এ `—` দেখায়।
 

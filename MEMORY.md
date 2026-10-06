@@ -15,3 +15,5 @@ Sample data: 21 departments, 42 KPIs, 50% each, Jan/Feb 2026 illustrative. Limit
 Delivered source, supplied dataset, build output, README and security notes. Calculation tests and production build passed. Browser UI QA was unavailable.
 
 2026-10-06 update: Implemented approved compact KPI-board/details-panel UI, mobile cards, functional browser Excel export using uploaded v.3 HR 25.6.26.xlsx and ExcelJS. Report scope department/single KPI, period full/half year, target/performance selection, metadata fields, dynamic merged action rows, original legacy sheets, detailed Monthly Results. Seven tests pass; production build verified. Excel module lazy-loaded on download.
+
+2026-10-07 download repair: Removed runtime template fetch from ExportModal. buildOriginalReport decodes bundled original-template bytes locally; regression checks exact equality with public template and report generation. Original Excel format retained. Added download-prepared status. 15 tests pass.

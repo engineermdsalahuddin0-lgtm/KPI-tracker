@@ -12,6 +12,7 @@ export default function ExportModal({
   const { language, t } = useLanguage();
   const [reportLanguage, setReportLanguage] = useState(language);
   const [alignmentOverrides, setAlignmentOverrides] = useState({});
+  const [downloadReady, setDownloadReady] = useState(false);
   const [scope, setScope] = useState('Department'),
     [dept, setDept] = useState(
       initialDept === 'All departments' ? departments[0] : initialDept,
@@ -38,12 +39,11 @@ export default function ExportModal({
   async function download() {
     setBusy(true);
     setError('');
+    setDownloadReady(false);
     try {
       if (!chosen.length) throw Error(t('No KPIs selected.'));
-      const response = await fetch(`${import.meta.env.BASE_URL}report-template.xlsx`);
-      if (!response.ok) throw Error(language === 'bn' ? 'Excel template পাওয়া যায়নি।' : 'Excel template could not be loaded.');
-      const { buildReport } = await import('./excel-export.mjs');
-      const b = await buildReport(await response.arrayBuffer(), chosen, {
+      const { buildOriginalReport } = await import('./excel-export.mjs');
+      const b = await buildOriginalReport(chosen, {
         year: Number(reportYear),
         dept,
         period,
@@ -62,6 +62,7 @@ export default function ExportModal({
       document.body.appendChild(a);
       a.click();
       a.remove();
+      setDownloadReady(true);
       setTimeout(() => URL.revokeObjectURL(url), 10000);
     } catch (e) {
       setError(e.message);
@@ -238,6 +239,7 @@ export default function ExportModal({
           </div>
         </div>
         {error && <p className="error">{error}</p>}
+        {downloadReady && <p role="status">{language === 'bn' ? 'Excel ফাইল তৈরি হয়েছে। ব্রাউজারের Downloads-এ দেখুন।' : 'Excel file prepared. Check your browser downloads.'}</p>}
         <div className="modal-bottom">
           <button className="button" onClick={onClose}>
             Cancel

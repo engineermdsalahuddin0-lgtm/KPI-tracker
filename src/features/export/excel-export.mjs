@@ -1,6 +1,11 @@
 import ExcelJS from 'exceljs';
 import { months } from '../../lib/model.mjs';
 import { buildDataWorkbook } from './data-export.mjs';
+import { getReportTemplate } from './report-template.mjs';
+
+export function buildOriginalReport(ks, options = {}) {
+  return buildReport(getReportTemplate(), ks, options);
+}
 
 const clone = (value) => JSON.parse(JSON.stringify(value));
 const shortMonths = ['জানু','ফেব্রু','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টে','অক্টো','নভে','ডিসে'];

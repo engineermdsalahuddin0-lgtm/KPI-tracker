@@ -2,9 +2,17 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import ExcelJS from 'exceljs';
-import {buildReport} from '../src/features/export/excel-export.mjs';
+import {buildReport, buildOriginalReport} from '../src/features/export/excel-export.mjs';
+import {getReportTemplate} from '../src/features/export/report-template.mjs';
 import {seed} from '../src/lib/model.mjs';
 const template=fs.readFileSync(new URL('../public/report-template.xlsx',import.meta.url));
+test('download uses bundled original template without a template network request',async()=>{
+  assert.deepEqual(Buffer.from(getReportTemplate()),template);
+  const workbook=new ExcelJS.Workbook();
+  await workbook.xlsx.load(await buildOriginalReport(seed().slice(0,1),{year:2026}));
+  assert.ok(workbook.getWorksheet('Goal Setting_Dept'));
+  assert.ok(workbook.getWorksheet('Monthly Results'));
+});
 test('ORG, DEPT and SEC alignments export to their own merged template column',async()=>{
   const ks=seed().slice(0,3).map((k,index)=>({...k,orgGoal:['ORG','DEPT','SEC'][index]}));
   const w=new ExcelJS.Workbook();await w.xlsx.load(await buildReport(template,ks,{year:2026,language:'en'}));
